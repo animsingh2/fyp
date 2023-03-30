@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/districts2326_1.js"></script>
+        <script src="data/HazardIndex_2.js"></script>
+        <script src="data/ResilienceIndex_3.js"></script>
+        <script src="data/RiskIndex_4.js"></script>
+        <script src="data/VulnerabilityIndex_5.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[22.1092591014847,113.81227580205493],[22.57923039481714,114.37667867279832]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Positronnolabelsretina_0');
+        map.getPane('pane_Positronnolabelsretina_0').style.zIndex = 400;
+        var layer_Positronnolabelsretina_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png', {
+            pane: 'pane_Positronnolabelsretina_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_Positronnolabelsretina_0;
+        map.addLayer(layer_Positronnolabelsretina_0);
+        function pop_districts2326_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CNAME'] !== null ? autolinker.link(feature.properties['CNAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CNAME_S'] !== null ? autolinker.link(feature.properties['CNAME_S'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ENAME'] !== null ? autolinker.link(feature.properties['ENAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Length'] !== null ? autolinker.link(feature.properties['SHAPE_Length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Area'] !== null ? autolinker.link(feature.properties['SHAPE_Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_districts2326_1_0() {
+            return {
+                pane: 'pane_districts2326_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,0.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_districts2326_1');
+        map.getPane('pane_districts2326_1').style.zIndex = 401;
+        map.getPane('pane_districts2326_1').style['mix-blend-mode'] = 'normal';
+        var layer_districts2326_1 = new L.geoJson(json_districts2326_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_districts2326_1',
+            layerName: 'layer_districts2326_1',
+            pane: 'pane_districts2326_1',
+            onEachFeature: pop_districts2326_1,
+            style: style_districts2326_1_0,
+        });
+        bounds_group.addLayer(layer_districts2326_1);
+        map.addLayer(layer_districts2326_1);
+        function pop_HazardIndex_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['District/Area/Building Group'] !== null ? autolinker.link(feature.properties['District/Area/Building Group'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Flood Hazard Index Score'] !== null ? autolinker.link(feature.properties['Flood Hazard Index Score'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Landslide Hazard Index Score'] !== null ? autolinker.link(feature.properties['Landslide Hazard Index Score'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UHI Hazard Index Score'] !== null ? autolinker.link(feature.properties['UHI Hazard Index Score'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Total Hazard Index Score'] !== null ? autolinker.link(feature.properties['Total Hazard Index Score'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_HazardIndex_2_0() {
+            return {
+                pane: 'pane_HazardIndex_2',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(125,139,143,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_HazardIndex_2');
+        map.getPane('pane_HazardIndex_2').style.zIndex = 402;
+        map.getPane('pane_HazardIndex_2').style['mix-blend-mode'] = 'normal';
+        var layer_HazardIndex_2 = new L.geoJson(json_HazardIndex_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_HazardIndex_2',
+            layerName: 'layer_HazardIndex_2',
+            pane: 'pane_HazardIndex_2',
+            onEachFeature: pop_HazardIndex_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_HazardIndex_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_HazardIndex_2);
+        map.addLayer(layer_HazardIndex_2);
+        function pop_ResilienceIndex_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['District/Area/Building Group'] !== null ? autolinker.link(feature.properties['District/Area/Building Group'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Economic'] !== null ? autolinker.link(feature.properties['Economic'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Social'] !== null ? autolinker.link(feature.properties['Social'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Environmental'] !== null ? autolinker.link(feature.properties['Environmental'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Total'] !== null ? autolinker.link(feature.properties['Total'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ResilienceIndex_3_0() {
+            return {
+                pane: 'pane_ResilienceIndex_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(196,60,57,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ResilienceIndex_3');
+        map.getPane('pane_ResilienceIndex_3').style.zIndex = 403;
+        map.getPane('pane_ResilienceIndex_3').style['mix-blend-mode'] = 'normal';
+        var layer_ResilienceIndex_3 = new L.geoJson(json_ResilienceIndex_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ResilienceIndex_3',
+            layerName: 'layer_ResilienceIndex_3',
+            pane: 'pane_ResilienceIndex_3',
+            onEachFeature: pop_ResilienceIndex_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_ResilienceIndex_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_ResilienceIndex_3);
+        map.addLayer(layer_ResilienceIndex_3);
+        function pop_RiskIndex_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['District/Area/Building Group'] !== null ? autolinker.link(feature.properties['District/Area/Building Group'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Risk Index'] !== null ? autolinker.link(feature.properties['Risk Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_RiskIndex_4_0() {
+            return {
+                pane: 'pane_RiskIndex_4',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(190,207,80,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_RiskIndex_4');
+        map.getPane('pane_RiskIndex_4').style.zIndex = 404;
+        map.getPane('pane_RiskIndex_4').style['mix-blend-mode'] = 'normal';
+        var layer_RiskIndex_4 = new L.geoJson(json_RiskIndex_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_RiskIndex_4',
+            layerName: 'layer_RiskIndex_4',
+            pane: 'pane_RiskIndex_4',
+            onEachFeature: pop_RiskIndex_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_RiskIndex_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_RiskIndex_4);
+        map.addLayer(layer_RiskIndex_4);
+        function pop_VulnerabilityIndex_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['District/Area/Building Group'] !== null ? autolinker.link(feature.properties['District/Area/Building Group'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Population Vulnerability Index'] !== null ? autolinker.link(feature.properties['Population Vulnerability Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Income Vulnerability Index'] !== null ? autolinker.link(feature.properties['Income Vulnerability Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Total'] !== null ? autolinker.link(feature.properties['Total'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_VulnerabilityIndex_5_0() {
+            return {
+                pane: 'pane_VulnerabilityIndex_5',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(183,72,75,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_VulnerabilityIndex_5');
+        map.getPane('pane_VulnerabilityIndex_5').style.zIndex = 405;
+        map.getPane('pane_VulnerabilityIndex_5').style['mix-blend-mode'] = 'normal';
+        var layer_VulnerabilityIndex_5 = new L.geoJson(json_VulnerabilityIndex_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_VulnerabilityIndex_5',
+            layerName: 'layer_VulnerabilityIndex_5',
+            pane: 'pane_VulnerabilityIndex_5',
+            onEachFeature: pop_VulnerabilityIndex_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_VulnerabilityIndex_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_VulnerabilityIndex_5);
+        map.addLayer(layer_VulnerabilityIndex_5);
+            var abstract = new L.Control({'position':'bottomright'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+
+                    abstract.show();
+                    return this._div;
+                };
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'This is a web map designed for my final year project.';
+            };
+            abstract.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/VulnerabilityIndex_5.png" /> Vulnerability Index': layer_VulnerabilityIndex_5,'<img src="legend/RiskIndex_4.png" /> Risk Index': layer_RiskIndex_4,'<img src="legend/ResilienceIndex_3.png" /> Resilience Index': layer_ResilienceIndex_3,'<img src="legend/HazardIndex_2.png" /> Hazard Index': layer_HazardIndex_2,'<img src="legend/districts2326_1.png" /> districts(2326)': layer_districts2326_1,"Positron [no labels] (retina)": layer_Positronnolabelsretina_0,}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_districts2326_1,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'ENAME'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Total": "real","Total Hazard Index Score": "real","Risk Index": "real"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Total = document.createElement("div");
+            div_Total.id = "div_Total";
+            div_Total.className = "slider";
+            document.getElementById("menu").appendChild(div_Total);
+            var lab_Total = document.createElement('div');
+            lab_Total.innerHTML  = 'Total: <span id="val_Total"></span>';
+            lab_Total.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_Total);
+            var reset_Total = document.createElement('div');
+            reset_Total.innerHTML = 'clear filter';
+            reset_Total.className = 'filterlabel';
+            lab_Total.className = 'filterlabel';
+            reset_Total.onclick = function() {
+                sel_Total.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_Total);
+            var sel_Total = document.getElementById('div_Total');
+            noUiSlider.create(sel_Total, {
+                connect: true,
+                start: [0.02, 0.74],
+                range: {
+                min: 0.02,
+                max: 0.74
+                }
+            });
+            sel_Total.noUiSlider.on('update', function (values) {
+            val_Total = document.getElementById('val_Total');
+            val_Total.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_TotalHazardIndexScore = document.createElement("div");
+            div_TotalHazardIndexScore.id = "div_TotalHazardIndexScore";
+            div_TotalHazardIndexScore.className = "slider";
+            document.getElementById("menu").appendChild(div_TotalHazardIndexScore);
+            var lab_TotalHazardIndexScore = document.createElement('div');
+            lab_TotalHazardIndexScore.innerHTML  = 'Total Hazard Index Score: <span id="val_TotalHazardIndexScore"></span>';
+            lab_TotalHazardIndexScore.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_TotalHazardIndexScore);
+            var reset_TotalHazardIndexScore = document.createElement('div');
+            reset_TotalHazardIndexScore.innerHTML = 'clear filter';
+            reset_TotalHazardIndexScore.className = 'filterlabel';
+            lab_TotalHazardIndexScore.className = 'filterlabel';
+            reset_TotalHazardIndexScore.onclick = function() {
+                sel_TotalHazardIndexScore.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_TotalHazardIndexScore);
+            var sel_TotalHazardIndexScore = document.getElementById('div_TotalHazardIndexScore');
+            noUiSlider.create(sel_TotalHazardIndexScore, {
+                connect: true,
+                start: [0.34, 0.61],
+                range: {
+                min: 0.34,
+                max: 0.61
+                }
+            });
+            sel_TotalHazardIndexScore.noUiSlider.on('update', function (values) {
+            val_TotalHazardIndexScore = document.getElementById('val_TotalHazardIndexScore');
+            val_TotalHazardIndexScore.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_RiskIndex = document.createElement("div");
+            div_RiskIndex.id = "div_RiskIndex";
+            div_RiskIndex.className = "slider";
+            document.getElementById("menu").appendChild(div_RiskIndex);
+            var lab_RiskIndex = document.createElement('div');
+            lab_RiskIndex.innerHTML  = 'Risk Index: <span id="val_RiskIndex"></span>';
+            lab_RiskIndex.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_RiskIndex);
+            var reset_RiskIndex = document.createElement('div');
+            reset_RiskIndex.innerHTML = 'clear filter';
+            reset_RiskIndex.className = 'filterlabel';
+            lab_RiskIndex.className = 'filterlabel';
+            reset_RiskIndex.onclick = function() {
+                sel_RiskIndex.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_RiskIndex);
+            var sel_RiskIndex = document.getElementById('div_RiskIndex');
+            noUiSlider.create(sel_RiskIndex, {
+                connect: true,
+                start: [0.01, 0.24],
+                range: {
+                min: 0.01,
+                max: 0.24
+                }
+            });
+            sel_RiskIndex.noUiSlider.on('update', function (values) {
+            val_RiskIndex = document.getElementById('val_RiskIndex');
+            val_RiskIndex.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+        </script>
+    </body>
+</html>
