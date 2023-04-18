@@ -8,10 +8,10 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/leaflet-search.css">
-        <link rel="stylesheet" href="css/filter.css">
-<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
         <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
         html, body, #map {
             width: 100%;
@@ -27,6 +27,8 @@
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
         <script src="js/leaflet-hash.js"></script>
@@ -35,15 +37,26 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
-        <script src="js/leaflet-search.js"></script>
-        <script src="js/tailDT.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/wNumb.js"></script>
-        <script src="data/districts2326_1.js"></script>
-        <script src="data/HazardIndex_2.js"></script>
-        <script src="data/ResilienceIndex_3.js"></script>
-        <script src="data/RiskIndex_4.js"></script>
-        <script src="data/VulnerabilityIndex_5.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="data/Districts_1.js"></script>
+        <script src="data/Consolidatedscores_2.js"></script>
+        <script src="data/ResilientInfrastructure_3.js"></script>
+        <script src="data/FloodproneAreas_4.js"></script>
+        <script src="data/PastLandslideIncidents_5.js"></script>
+        <script src="data/EducationFacilities_6.js"></script>
+        <script src="data/HealthcareFacilities_7.js"></script>
+        <script src="data/Parks_8.js"></script>
+        <script src="data/BanksATMs_9.js"></script>
+        <script src="data/Markets_10.js"></script>
+        <script src="data/SportsFacilities_11.js"></script>
+        <script src="data/MTRExits_12.js"></script>
+        <script src="data/BusStops_13.js"></script>
+        <script src="data/TransportationFacilities_14.js"></script>
+        <script src="data/HazardbasedClustering_15.js"></script>
+        <script src="data/VulnerabilitybasedClustering_16.js"></script>
+        <script src="data/ResiliencebasedClustering_17.js"></script>
+        <script src="data/RiskbasedClustering_18.js"></script>
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -62,11 +75,23 @@
         }
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[22.1092591014847,113.81227580205493],[22.57923039481714,114.37667867279832]]);
+        }).fitBounds([[22.24897352142689,114.13646029380564],[22.344116634517206,114.23600236192655]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
         L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'feet',
+            secondaryLengthUnit: 'miles',
+            primaryAreaUnit: 'sqfeet',
+            secondaryAreaUnit: 'sqmiles'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
@@ -83,7 +108,7 @@
         });
         layer_Positronnolabelsretina_0;
         map.addLayer(layer_Positronnolabelsretina_0);
-        function pop_districts2326_1(feature, layer) {
+        function pop_Districts_1(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -94,33 +119,20 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">District ID</th>\
+                        <td>' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CNAME'] !== null ? autolinker.link(feature.properties['CNAME'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CNAME_S'] !== null ? autolinker.link(feature.properties['CNAME_S'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ENAME'] !== null ? autolinker.link(feature.properties['ENAME'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SHAPE_Length'] !== null ? autolinker.link(feature.properties['SHAPE_Length'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SHAPE_Area'] !== null ? autolinker.link(feature.properties['SHAPE_Area'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">District Name</th>\
+                        <td>' + (feature.properties['ENAME'] !== null ? autolinker.link(feature.properties['ENAME'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_districts2326_1_0() {
+        function style_Districts_1_0() {
             return {
-                pane: 'pane_districts2326_1',
+                pane: 'pane_Districts_1',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -133,21 +145,21 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_districts2326_1');
-        map.getPane('pane_districts2326_1').style.zIndex = 401;
-        map.getPane('pane_districts2326_1').style['mix-blend-mode'] = 'normal';
-        var layer_districts2326_1 = new L.geoJson(json_districts2326_1, {
+        map.createPane('pane_Districts_1');
+        map.getPane('pane_Districts_1').style.zIndex = 401;
+        map.getPane('pane_Districts_1').style['mix-blend-mode'] = 'normal';
+        var layer_Districts_1 = new L.geoJson(json_Districts_1, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_districts2326_1',
-            layerName: 'layer_districts2326_1',
-            pane: 'pane_districts2326_1',
-            onEachFeature: pop_districts2326_1,
-            style: style_districts2326_1_0,
+            dataVar: 'json_Districts_1',
+            layerName: 'layer_Districts_1',
+            pane: 'pane_Districts_1',
+            onEachFeature: pop_Districts_1,
+            style: style_Districts_1_0,
         });
-        bounds_group.addLayer(layer_districts2326_1);
-        map.addLayer(layer_districts2326_1);
-        function pop_HazardIndex_2(feature, layer) {
+        bounds_group.addLayer(layer_Districts_1);
+        map.addLayer(layer_Districts_1);
+        function pop_Consolidatedscores_2(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -158,33 +170,152 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['District/Area/Building Group'] !== null ? autolinker.link(feature.properties['District/Area/Building Group'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Geocoding Address</th>\
+                        <td>' + (feature.properties['Geocoding Address'] !== null ? autolinker.link(feature.properties['Geocoding Address'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Latitude</th>\
+                        <td>' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Longitude</th>\
+                        <td>' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Flood Hazard Index Score'] !== null ? autolinker.link(feature.properties['Flood Hazard Index Score'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Flood Hazard Index Score</th>\
+                        <td>' + (feature.properties['Flood'] !== null ? autolinker.link(feature.properties['Flood'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Landslide Hazard Index Score'] !== null ? autolinker.link(feature.properties['Landslide Hazard Index Score'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Landslide Hazard Index Score</th>\
+                        <td>' + (feature.properties['Landslide'] !== null ? autolinker.link(feature.properties['Landslide'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['UHI Hazard Index Score'] !== null ? autolinker.link(feature.properties['UHI Hazard Index Score'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Heatwave Hazard Index Score</th>\
+                        <td>' + (feature.properties['UHI'] !== null ? autolinker.link(feature.properties['UHI'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Total Hazard Index Score'] !== null ? autolinker.link(feature.properties['Total Hazard Index Score'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Total Hazard Index Score</th>\
+                        <td>' + (feature.properties['Total'] !== null ? autolinker.link(feature.properties['Total'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Social Vulnerability Index Score</th>\
+                        <td>' + (feature.properties['Population not between 15 to 64'] !== null ? autolinker.link(feature.properties['Population not between 15 to 64'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Economic Vulnerability Index Score</th>\
+                        <td>' + (feature.properties['Income'] !== null ? autolinker.link(feature.properties['Income'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Total Vulnerability Index Score</th>\
+                        <td>' + (feature.properties['Total_1'] !== null ? autolinker.link(feature.properties['Total_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Economic Resilience Index Score</th>\
+                        <td>' + (feature.properties['Economic'] !== null ? autolinker.link(feature.properties['Economic'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Social Resilience Index Score</th>\
+                        <td>' + (feature.properties['Social'] !== null ? autolinker.link(feature.properties['Social'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Environmental Resilience Index Score</th>\
+                        <td>' + (feature.properties['Environmental'] !== null ? autolinker.link(feature.properties['Environmental'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Total Resilience Index Score</th>\
+                        <td>' + (feature.properties['Total_2'] !== null ? autolinker.link(feature.properties['Total_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Integrated Risk Index Score</th>\
+                        <td>' + (feature.properties['Risk Score'] !== null ? autolinker.link(feature.properties['Risk Score'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_HazardIndex_2_0() {
+        function style_Consolidatedscores_2_0() {
             return {
-                pane: 'pane_HazardIndex_2',
+                pane: 'pane_Consolidatedscores_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+        }
+        function style_Consolidatedscores_2_1() {
+            return {
+                pane: 'pane_Consolidatedscores_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/accommodation_camping.svg',
+            iconSize: [15.2, 15.2]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Consolidatedscores_2');
+        map.getPane('pane_Consolidatedscores_2').style.zIndex = 402;
+        map.getPane('pane_Consolidatedscores_2').style['mix-blend-mode'] = 'normal';
+        var layer_Consolidatedscores_2 = new L.geoJson.multiStyle(json_Consolidatedscores_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Consolidatedscores_2',
+            layerName: 'layer_Consolidatedscores_2',
+            pane: 'pane_Consolidatedscores_2',
+            onEachFeature: pop_Consolidatedscores_2,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Consolidatedscores_2_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Consolidatedscores_2_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_Consolidatedscores_2);
+        map.addLayer(layer_Consolidatedscores_2);
+        function pop_ResilientInfrastructure_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Facility Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Facility Type</th>\
+                        <td>' + (feature.properties['Type'] !== null ? autolinker.link(feature.properties['Type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Operated by</th>\
+                        <td>' + (feature.properties['Operated by'] !== null ? autolinker.link(feature.properties['Operated by'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Description</th>\
+                        <td>' + (feature.properties['Description'] !== null ? autolinker.link(feature.properties['Description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ResilientInfrastructure_3_0() {
+            return {
+                pane: 'pane_ResilientInfrastructure_3',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -194,31 +325,30 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(125,139,143,1.0)',
+                fillColor: 'rgba(145,82,45,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_HazardIndex_2');
-        map.getPane('pane_HazardIndex_2').style.zIndex = 402;
-        map.getPane('pane_HazardIndex_2').style['mix-blend-mode'] = 'normal';
-        var layer_HazardIndex_2 = new L.geoJson(json_HazardIndex_2, {
+        map.createPane('pane_ResilientInfrastructure_3');
+        map.getPane('pane_ResilientInfrastructure_3').style.zIndex = 403;
+        map.getPane('pane_ResilientInfrastructure_3').style['mix-blend-mode'] = 'normal';
+        var layer_ResilientInfrastructure_3 = new L.geoJson(json_ResilientInfrastructure_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_HazardIndex_2',
-            layerName: 'layer_HazardIndex_2',
-            pane: 'pane_HazardIndex_2',
-            onEachFeature: pop_HazardIndex_2,
+            dataVar: 'json_ResilientInfrastructure_3',
+            layerName: 'layer_ResilientInfrastructure_3',
+            pane: 'pane_ResilientInfrastructure_3',
+            onEachFeature: pop_ResilientInfrastructure_3,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_HazardIndex_2_0(feature));
+                return L.circleMarker(latlng, style_ResilientInfrastructure_3_0(feature));
             },
         });
-        bounds_group.addLayer(layer_HazardIndex_2);
-        map.addLayer(layer_HazardIndex_2);
-        function pop_ResilienceIndex_3(feature, layer) {
+        bounds_group.addLayer(layer_ResilientInfrastructure_3);
+        function pop_FloodproneAreas_4(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -229,33 +359,620 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['District/Area/Building Group'] !== null ? autolinker.link(feature.properties['District/Area/Building Group'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Economic'] !== null ? autolinker.link(feature.properties['Economic'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Social'] !== null ? autolinker.link(feature.properties['Social'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Environmental'] !== null ? autolinker.link(feature.properties['Environmental'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Total'] !== null ? autolinker.link(feature.properties['Total'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Location</th>\
+                        <td>' + (feature.properties['Address'] !== null ? autolinker.link(feature.properties['Address'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_ResilienceIndex_3_0() {
+        function style_FloodproneAreas_4_0() {
             return {
-                pane: 'pane_ResilienceIndex_3',
+                pane: 'pane_FloodproneAreas_4',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,89,137,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_FloodproneAreas_4');
+        map.getPane('pane_FloodproneAreas_4').style.zIndex = 404;
+        map.getPane('pane_FloodproneAreas_4').style['mix-blend-mode'] = 'normal';
+        var layer_FloodproneAreas_4 = new L.geoJson(json_FloodproneAreas_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_FloodproneAreas_4',
+            layerName: 'layer_FloodproneAreas_4',
+            pane: 'pane_FloodproneAreas_4',
+            onEachFeature: pop_FloodproneAreas_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_FloodproneAreas_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_FloodproneAreas_4);
+        function pop_PastLandslideIncidents_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Reported by</th>\
+                        <td>' + (feature.properties['CALLFROM'] !== null ? autolinker.link(feature.properties['CALLFROM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Date</th>\
+                        <td>' + (feature.properties['CALLDATE'] !== null ? autolinker.link(feature.properties['CALLDATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Location</th>\
+                        <td>' + (feature.properties['LOCATION'] !== null ? autolinker.link(feature.properties['LOCATION'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Slope Number</th>\
+                        <td>' + (feature.properties['SLOPENUM'] !== null ? autolinker.link(feature.properties['SLOPENUM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Cause</th>\
+                        <td>' + (feature.properties['FEATTYPE'] !== null ? autolinker.link(feature.properties['FEATTYPE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Scale</th>\
+                        <td>' + (feature.properties['SCALE'] !== null ? autolinker.link(feature.properties['SCALE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Facility Affected</th>\
+                        <td>' + (feature.properties['FACAFF'] !== null ? autolinker.link(feature.properties['FACAFF'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Consequence</th>\
+                        <td>' + (feature.properties['CONSEC'] !== null ? autolinker.link(feature.properties['CONSEC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">No. of deaths</th>\
+                        <td>' + (feature.properties['CONSEC___DEATHNO'] !== null ? autolinker.link(feature.properties['CONSEC___DEATHNO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">No.  of injuries</th>\
+                        <td>' + (feature.properties['CONSEC___INJURYNO'] !== null ? autolinker.link(feature.properties['CONSEC___INJURYNO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">No. of evacuations</th>\
+                        <td>' + (feature.properties['CONSEC___EVACUATED'] !== null ? autolinker.link(feature.properties['CONSEC___EVACUATED'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PastLandslideIncidents_5_0() {
+            return {
+                pane: 'pane_PastLandslideIncidents_5',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,0.656)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(164,113,88,0.656)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PastLandslideIncidents_5');
+        map.getPane('pane_PastLandslideIncidents_5').style.zIndex = 405;
+        map.getPane('pane_PastLandslideIncidents_5').style['mix-blend-mode'] = 'normal';
+        var layer_PastLandslideIncidents_5 = new L.geoJson(json_PastLandslideIncidents_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PastLandslideIncidents_5',
+            layerName: 'layer_PastLandslideIncidents_5',
+            pane: 'pane_PastLandslideIncidents_5',
+            onEachFeature: pop_PastLandslideIncidents_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_PastLandslideIncidents_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_PastLandslideIncidents_5);
+        function pop_EducationFacilities_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Facility Name</th>\
+                        <td>' + (feature.properties['Facility Name'] !== null ? autolinker.link(feature.properties['Facility Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? autolinker.link(feature.properties['Address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Opening Hours</th>\
+                        <td>' + (feature.properties['Opening Hours'] !== null ? autolinker.link(feature.properties['Opening Hours'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telephone</th>\
+                        <td>' + (feature.properties['Telephone'] !== null ? autolinker.link(feature.properties['Telephone'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Email Address</th>\
+                        <td>' + (feature.properties['Email Address'] !== null ? autolinker.link(feature.properties['Email Address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Website</th>\
+                        <td>' + (feature.properties['Website'] !== null ? autolinker.link(feature.properties['Website'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_EducationFacilities_6_0() {
+            return {
+                pane: 'pane_EducationFacilities_6',
+                shape: 'diamond',
+                radius: 8.8,
+                opacity: 1,
+                color: 'rgba(50,87,128,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(72,123,182,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_EducationFacilities_6');
+        map.getPane('pane_EducationFacilities_6').style.zIndex = 406;
+        map.getPane('pane_EducationFacilities_6').style['mix-blend-mode'] = 'normal';
+        var layer_EducationFacilities_6 = new L.geoJson(json_EducationFacilities_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_EducationFacilities_6',
+            layerName: 'layer_EducationFacilities_6',
+            pane: 'pane_EducationFacilities_6',
+            onEachFeature: pop_EducationFacilities_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_EducationFacilities_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_EducationFacilities_6);
+        function pop_HealthcareFacilities_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Facility Name</th>\
+                        <td>' + (feature.properties['Facility Name'] !== null ? autolinker.link(feature.properties['Facility Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? autolinker.link(feature.properties['Address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dsitrict</th>\
+                        <td>' + (feature.properties['District'] !== null ? autolinker.link(feature.properties['District'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telephone</th>\
+                        <td>' + (feature.properties['Telephone'] !== null ? autolinker.link(feature.properties['Telephone'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Website</th>\
+                        <td>' + (feature.properties['Website'] !== null ? autolinker.link(feature.properties['Website'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Opening Hours</th>\
+                        <td>' + (feature.properties['Opening Hours'] !== null ? autolinker.link(feature.properties['Opening Hours'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telephone</th>\
+                        <td>' + (feature.properties['Booking Tel No'] !== null ? autolinker.link(feature.properties['Booking Tel No'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Remarks</th>\
+                        <td>' + (feature.properties['Remarks'] !== null ? autolinker.link(feature.properties['Remarks'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_HealthcareFacilities_7_0() {
+            return {
+                pane: 'pane_HealthcareFacilities_7',
+                radius: 10.4,
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+        }
+        function style_HealthcareFacilities_7_1() {
+            return {
+                pane: 'pane_HealthcareFacilities_7',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,26,28,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_HealthcareFacilities_7');
+        map.getPane('pane_HealthcareFacilities_7').style.zIndex = 407;
+        map.getPane('pane_HealthcareFacilities_7').style['mix-blend-mode'] = 'normal';
+        var layer_HealthcareFacilities_7 = new L.geoJson.multiStyle(json_HealthcareFacilities_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_HealthcareFacilities_7',
+            layerName: 'layer_HealthcareFacilities_7',
+            pane: 'pane_HealthcareFacilities_7',
+            onEachFeature: pop_HealthcareFacilities_7,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_HealthcareFacilities_7_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_HealthcareFacilities_7_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_HealthcareFacilities_7);
+        function pop_Parks_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Facility Name</th>\
+                        <td>' + (feature.properties['Facility Name'] !== null ? autolinker.link(feature.properties['Facility Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? autolinker.link(feature.properties['Address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dsitrict</th>\
+                        <td>' + (feature.properties['District'] !== null ? autolinker.link(feature.properties['District'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Facility Type</th>\
+                        <td>' + (feature.properties['Facility Type'] !== null ? autolinker.link(feature.properties['Facility Type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Facility Details</th>\
+                        <td>' + (feature.properties['Facility Details'] !== null ? autolinker.link(feature.properties['Facility Details'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Opening Hours</th>\
+                        <td>' + (feature.properties['Opening Hours'] !== null ? autolinker.link(feature.properties['Opening Hours'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telephone</th>\
+                        <td>' + (feature.properties['Telephone'] !== null ? autolinker.link(feature.properties['Telephone'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Email Address</th>\
+                        <td>' + (feature.properties['Email Address'] !== null ? autolinker.link(feature.properties['Email Address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Website</th>\
+                        <td>' + (feature.properties['Website'] !== null ? autolinker.link(feature.properties['Website'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Parks_8_0() {
+            return {
+                pane: 'pane_Parks_8',
+                shape: 'diamond',
+                radius: 8.8,
+                opacity: 1,
+                color: 'rgba(61,128,53,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(84,176,74,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Parks_8');
+        map.getPane('pane_Parks_8').style.zIndex = 408;
+        map.getPane('pane_Parks_8').style['mix-blend-mode'] = 'normal';
+        var layer_Parks_8 = new L.geoJson(json_Parks_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Parks_8',
+            layerName: 'layer_Parks_8',
+            pane: 'pane_Parks_8',
+            onEachFeature: pop_Parks_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Parks_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Parks_8);
+        function pop_BanksATMs_9(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Facility Type</th>\
+                        <td>' + (feature.properties['amenity'] !== null ? autolinker.link(feature.properties['amenity'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Facility Name</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_BanksATMs_9_0() {
+            return {
+                pane: 'pane_BanksATMs_9',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(255,255,255,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_BanksATMs_9');
+        map.getPane('pane_BanksATMs_9').style.zIndex = 409;
+        map.getPane('pane_BanksATMs_9').style['mix-blend-mode'] = 'normal';
+        var layer_BanksATMs_9 = new L.geoJson(json_BanksATMs_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_BanksATMs_9',
+            layerName: 'layer_BanksATMs_9',
+            pane: 'pane_BanksATMs_9',
+            onEachFeature: pop_BanksATMs_9,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_BanksATMs_9_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BanksATMs_9);
+        function pop_Markets_10(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Facility Type</th>\
+                        <td>' + (feature.properties['amenity'] !== null ? autolinker.link(feature.properties['amenity'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Facility Name</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Markets_10_0() {
+            return {
+                pane: 'pane_Markets_10',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(247,247,247,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(149,149,149,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Markets_10');
+        map.getPane('pane_Markets_10').style.zIndex = 410;
+        map.getPane('pane_Markets_10').style['mix-blend-mode'] = 'normal';
+        var layer_Markets_10 = new L.geoJson(json_Markets_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Markets_10',
+            layerName: 'layer_Markets_10',
+            pane: 'pane_Markets_10',
+            onEachFeature: pop_Markets_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Markets_10_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Markets_10);
+        function pop_SportsFacilities_11(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Facility Name</th>\
+                        <td>' + (feature.properties['Facility Name'] !== null ? autolinker.link(feature.properties['Facility Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Facility Type</th>\
+                        <td>' + (feature.properties['Facility Type'] !== null ? autolinker.link(feature.properties['Facility Type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Facility Details</th>\
+                        <td>' + (feature.properties['Facility Details'] !== null ? autolinker.link(feature.properties['Facility Details'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Opening Hours</th>\
+                        <td>' + (feature.properties['Opening Hours'] !== null ? autolinker.link(feature.properties['Opening Hours'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telephone</th>\
+                        <td>' + (feature.properties['Telephone'] !== null ? autolinker.link(feature.properties['Telephone'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Email Address</th>\
+                        <td>' + (feature.properties['Email Address'] !== null ? autolinker.link(feature.properties['Email Address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Website</th>\
+                        <td>' + (feature.properties['Website'] !== null ? autolinker.link(feature.properties['Website'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_SportsFacilities_11_0() {
+            return {
+                pane: 'pane_SportsFacilities_11',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(114,155,111,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_SportsFacilities_11');
+        map.getPane('pane_SportsFacilities_11').style.zIndex = 411;
+        map.getPane('pane_SportsFacilities_11').style['mix-blend-mode'] = 'normal';
+        var layer_SportsFacilities_11 = new L.geoJson(json_SportsFacilities_11, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_SportsFacilities_11',
+            layerName: 'layer_SportsFacilities_11',
+            pane: 'pane_SportsFacilities_11',
+            onEachFeature: pop_SportsFacilities_11,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_SportsFacilities_11_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_SportsFacilities_11);
+        function pop_MTRExits_12(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name/Exit</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name/Exit</th>\
+                        <td>' + (feature.properties['ref'] !== null ? autolinker.link(feature.properties['ref'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MTRExits_12_0() {
+            return {
+                pane: 'pane_MTRExits_12',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -269,27 +986,26 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_ResilienceIndex_3');
-        map.getPane('pane_ResilienceIndex_3').style.zIndex = 403;
-        map.getPane('pane_ResilienceIndex_3').style['mix-blend-mode'] = 'normal';
-        var layer_ResilienceIndex_3 = new L.geoJson(json_ResilienceIndex_3, {
+        map.createPane('pane_MTRExits_12');
+        map.getPane('pane_MTRExits_12').style.zIndex = 412;
+        map.getPane('pane_MTRExits_12').style['mix-blend-mode'] = 'normal';
+        var layer_MTRExits_12 = new L.geoJson(json_MTRExits_12, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_ResilienceIndex_3',
-            layerName: 'layer_ResilienceIndex_3',
-            pane: 'pane_ResilienceIndex_3',
-            onEachFeature: pop_ResilienceIndex_3,
+            dataVar: 'json_MTRExits_12',
+            layerName: 'layer_MTRExits_12',
+            pane: 'pane_MTRExits_12',
+            onEachFeature: pop_MTRExits_12,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_ResilienceIndex_3_0(feature));
+                return L.circleMarker(latlng, style_MTRExits_12_0(feature));
             },
         });
-        bounds_group.addLayer(layer_ResilienceIndex_3);
-        map.addLayer(layer_ResilienceIndex_3);
-        function pop_RiskIndex_4(feature, layer) {
+        bounds_group.addLayer(layer_MTRExits_12);
+        function pop_BusStops_13(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -300,24 +1016,16 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['District/Area/Building Group'] !== null ? autolinker.link(feature.properties['District/Area/Building Group'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Risk Index'] !== null ? autolinker.link(feature.properties['Risk Index'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Stop ID</th>\
+                        <td>' + (feature.properties['STOP_ID'] !== null ? autolinker.link(feature.properties['STOP_ID'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_RiskIndex_4_0() {
+        function style_BusStops_13_0() {
             return {
-                pane: 'pane_RiskIndex_4',
+                pane: 'pane_BusStops_13',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -327,31 +1035,30 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(190,207,80,1.0)',
+                fillColor: 'rgba(213,180,60,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_RiskIndex_4');
-        map.getPane('pane_RiskIndex_4').style.zIndex = 404;
-        map.getPane('pane_RiskIndex_4').style['mix-blend-mode'] = 'normal';
-        var layer_RiskIndex_4 = new L.geoJson(json_RiskIndex_4, {
+        map.createPane('pane_BusStops_13');
+        map.getPane('pane_BusStops_13').style.zIndex = 413;
+        map.getPane('pane_BusStops_13').style['mix-blend-mode'] = 'normal';
+        var layer_BusStops_13 = new L.geoJson(json_BusStops_13, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_RiskIndex_4',
-            layerName: 'layer_RiskIndex_4',
-            pane: 'pane_RiskIndex_4',
-            onEachFeature: pop_RiskIndex_4,
+            dataVar: 'json_BusStops_13',
+            layerName: 'layer_BusStops_13',
+            pane: 'pane_BusStops_13',
+            onEachFeature: pop_BusStops_13,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_RiskIndex_4_0(feature));
+                return L.circleMarker(latlng, style_BusStops_13_0(feature));
             },
         });
-        bounds_group.addLayer(layer_RiskIndex_4);
-        map.addLayer(layer_RiskIndex_4);
-        function pop_VulnerabilityIndex_5(feature, layer) {
+        bounds_group.addLayer(layer_BusStops_13);
+        function pop_TransportationFacilities_14(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -362,30 +1069,54 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['District/Area/Building Group'] !== null ? autolinker.link(feature.properties['District/Area/Building Group'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['STOP_ID'] !== null ? autolinker.link(feature.properties['STOP_ID'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['X'] !== null ? autolinker.link(feature.properties['X'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Population Vulnerability Index'] !== null ? autolinker.link(feature.properties['Population Vulnerability Index'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Y'] !== null ? autolinker.link(feature.properties['Y'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Income Vulnerability Index'] !== null ? autolinker.link(feature.properties['Income Vulnerability Index'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['LAST_UPDATE_DATE_STR'] !== null ? autolinker.link(feature.properties['LAST_UPDATE_DATE_STR'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Total'] !== null ? autolinker.link(feature.properties['Total'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['osm_id'] !== null ? autolinker.link(feature.properties['osm_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['type'] !== null ? autolinker.link(feature.properties['type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ref'] !== null ? autolinker.link(feature.properties['ref'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lat'] !== null ? autolinker.link(feature.properties['lat'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lon'] !== null ? autolinker.link(feature.properties['lon'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['layer'] !== null ? autolinker.link(feature.properties['layer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['path'] !== null ? autolinker.link(feature.properties['path'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_VulnerabilityIndex_5_0() {
+        function style_TransportationFacilities_14_0() {
             return {
-                pane: 'pane_VulnerabilityIndex_5',
+                pane: 'pane_TransportationFacilities_14',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -395,45 +1126,577 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(183,72,75,1.0)',
+                fillColor: 'rgba(243,166,178,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_VulnerabilityIndex_5');
-        map.getPane('pane_VulnerabilityIndex_5').style.zIndex = 405;
-        map.getPane('pane_VulnerabilityIndex_5').style['mix-blend-mode'] = 'normal';
-        var layer_VulnerabilityIndex_5 = new L.geoJson(json_VulnerabilityIndex_5, {
+        map.createPane('pane_TransportationFacilities_14');
+        map.getPane('pane_TransportationFacilities_14').style.zIndex = 414;
+        map.getPane('pane_TransportationFacilities_14').style['mix-blend-mode'] = 'normal';
+        var layer_TransportationFacilities_14 = new L.geoJson(json_TransportationFacilities_14, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_VulnerabilityIndex_5',
-            layerName: 'layer_VulnerabilityIndex_5',
-            pane: 'pane_VulnerabilityIndex_5',
-            onEachFeature: pop_VulnerabilityIndex_5,
+            dataVar: 'json_TransportationFacilities_14',
+            layerName: 'layer_TransportationFacilities_14',
+            pane: 'pane_TransportationFacilities_14',
+            onEachFeature: pop_TransportationFacilities_14,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_VulnerabilityIndex_5_0(feature));
+                return L.circleMarker(latlng, style_TransportationFacilities_14_0(feature));
             },
         });
-        bounds_group.addLayer(layer_VulnerabilityIndex_5);
-        map.addLayer(layer_VulnerabilityIndex_5);
-            var abstract = new L.Control({'position':'bottomright'});
-            abstract.onAdd = function (map) {
-                this._div = L.DomUtil.create('div',
-                'leaflet-control abstract');
-                this._div.id = 'abstract'
+        bounds_group.addLayer(layer_TransportationFacilities_14);
+        function pop_HazardbasedClustering_15(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Geocoding Address</th>\
+                        <td>' + (feature.properties['field_2'] !== null ? autolinker.link(feature.properties['field_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Latitude</th>\
+                        <td>' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Longitude</th>\
+                        <td>' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Flood Hazard Index</th>\
+                        <td>' + (feature.properties['Flood Hazard Index'] !== null ? autolinker.link(feature.properties['Flood Hazard Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Landslide Hazard Index</th>\
+                        <td>' + (feature.properties['Landslide Hazard Index'] !== null ? autolinker.link(feature.properties['Landslide Hazard Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Heatwave Hazard Index</th>\
+                        <td>' + (feature.properties['Heatwave Hazard Index'] !== null ? autolinker.link(feature.properties['Heatwave Hazard Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Integrated Hazard Index</th>\
+                        <td>' + (feature.properties['Integrated Hazard Index'] !== null ? autolinker.link(feature.properties['Integrated Hazard Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Normalized Hazard Index</th>\
+                        <td>' + (feature.properties['Normalized Hazard Index'] !== null ? autolinker.link(feature.properties['Normalized Hazard Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Hazard Rank</th>\
+                        <td>' + (feature.properties['Hazard Rank'] !== null ? autolinker.link(feature.properties['Hazard Rank'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Hazard Classification</th>\
+                        <td>' + (feature.properties['Hazard Classification'] !== null ? autolinker.link(feature.properties['Hazard Classification'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
 
-                    abstract.show();
-                    return this._div;
+        function style_HazardbasedClustering_15_0(feature) {
+            switch(String(feature.properties['Hazard Classification'])) {
+                case 'HH':
+                    return {
+                pane: 'pane_HazardbasedClustering_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'HNS':
+                    return {
+                pane: 'pane_HazardbasedClustering_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'LL':
+                    return {
+                pane: 'pane_HazardbasedClustering_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'LNS':
+                    return {
+                pane: 'pane_HazardbasedClustering_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'NS':
+                    return {
+                pane: 'pane_HazardbasedClustering_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_HazardbasedClustering_15');
+        map.getPane('pane_HazardbasedClustering_15').style.zIndex = 415;
+        map.getPane('pane_HazardbasedClustering_15').style['mix-blend-mode'] = 'normal';
+        var layer_HazardbasedClustering_15 = new L.geoJson(json_HazardbasedClustering_15, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_HazardbasedClustering_15',
+            layerName: 'layer_HazardbasedClustering_15',
+            pane: 'pane_HazardbasedClustering_15',
+            onEachFeature: pop_HazardbasedClustering_15,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
                 };
-                abstract.show = function () {
-                    this._div.classList.remove("abstract");
-                    this._div.classList.add("abstractUncollapsed");
-                    this._div.innerHTML = 'This is a web map designed for my final year project.';
-            };
-            abstract.addTo(map);
+                return L.marker(latlng, style_HazardbasedClustering_15_0(feature));
+            },
+        });
+        var cluster_HazardbasedClustering_15 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_HazardbasedClustering_15.addLayer(layer_HazardbasedClustering_15);
+
+        bounds_group.addLayer(layer_HazardbasedClustering_15);
+        function pop_VulnerabilitybasedClustering_16(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Geocoding Address</th>\
+                        <td>' + (feature.properties['field_2'] !== null ? autolinker.link(feature.properties['field_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Latitude</th>\
+                        <td>' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Longitude</th>\
+                        <td>' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Economic Vulnerability Index</th>\
+                        <td>' + (feature.properties['Economic Vulnerability Index'] !== null ? autolinker.link(feature.properties['Economic Vulnerability Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Social Vulnerability Index</th>\
+                        <td>' + (feature.properties['Social Vulnerability Index'] !== null ? autolinker.link(feature.properties['Social Vulnerability Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Integrated Vulnerability Index</th>\
+                        <td>' + (feature.properties['Integrated Vulnerability Index'] !== null ? autolinker.link(feature.properties['Integrated Vulnerability Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Normalized Vulnerability Index</th>\
+                        <td>' + (feature.properties['Normalized Vulnerability Index'] !== null ? autolinker.link(feature.properties['Normalized Vulnerability Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Vulnerability Rank</th>\
+                        <td>' + (feature.properties['Vulnerability Rank'] !== null ? autolinker.link(feature.properties['Vulnerability Rank'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Vulnerability Classification</th>\
+                        <td>' + (feature.properties['Vulnerability Classification'] !== null ? autolinker.link(feature.properties['Vulnerability Classification'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_VulnerabilitybasedClustering_16_0(feature) {
+            switch(String(feature.properties['Vulnerability Classification'])) {
+                case 'HH':
+                    return {
+                pane: 'pane_VulnerabilitybasedClustering_16',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'HNS':
+                    return {
+                pane: 'pane_VulnerabilitybasedClustering_16',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'LL':
+                    return {
+                pane: 'pane_VulnerabilitybasedClustering_16',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'LNS':
+                    return {
+                pane: 'pane_VulnerabilitybasedClustering_16',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'NS':
+                    return {
+                pane: 'pane_VulnerabilitybasedClustering_16',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_VulnerabilitybasedClustering_16');
+        map.getPane('pane_VulnerabilitybasedClustering_16').style.zIndex = 416;
+        map.getPane('pane_VulnerabilitybasedClustering_16').style['mix-blend-mode'] = 'normal';
+        var layer_VulnerabilitybasedClustering_16 = new L.geoJson(json_VulnerabilitybasedClustering_16, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_VulnerabilitybasedClustering_16',
+            layerName: 'layer_VulnerabilitybasedClustering_16',
+            pane: 'pane_VulnerabilitybasedClustering_16',
+            onEachFeature: pop_VulnerabilitybasedClustering_16,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_VulnerabilitybasedClustering_16_0(feature));
+            },
+        });
+        var cluster_VulnerabilitybasedClustering_16 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_VulnerabilitybasedClustering_16.addLayer(layer_VulnerabilitybasedClustering_16);
+
+        bounds_group.addLayer(layer_VulnerabilitybasedClustering_16);
+        function pop_ResiliencebasedClustering_17(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Geocoding Address</th>\
+                        <td>' + (feature.properties['field_2'] !== null ? autolinker.link(feature.properties['field_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Latitude</th>\
+                        <td>' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Longitude</th>\
+                        <td>' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Economic Resilience Index</th>\
+                        <td>' + (feature.properties['Economic Resilience Index'] !== null ? autolinker.link(feature.properties['Economic Resilience Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Social Resilience Index</th>\
+                        <td>' + (feature.properties['Social Resilience Index'] !== null ? autolinker.link(feature.properties['Social Resilience Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Environmental Resilience Index</th>\
+                        <td>' + (feature.properties['Environmental Resilience Index'] !== null ? autolinker.link(feature.properties['Environmental Resilience Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Integrated Resilience Index</th>\
+                        <td>' + (feature.properties['Integrated Resilience Index'] !== null ? autolinker.link(feature.properties['Integrated Resilience Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Normalized Resilience Index</th>\
+                        <td>' + (feature.properties['Normalized Resilience Index'] !== null ? autolinker.link(feature.properties['Normalized Resilience Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Resilience Ranking</th>\
+                        <td>' + (feature.properties['Resilience Ranking'] !== null ? autolinker.link(feature.properties['Resilience Ranking'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Resilience Classification</th>\
+                        <td>' + (feature.properties['Resilience Classification'] !== null ? autolinker.link(feature.properties['Resilience Classification'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ResiliencebasedClustering_17_0(feature) {
+            switch(String(feature.properties['Resilience Classification'])) {
+                case 'HH':
+                    return {
+                pane: 'pane_ResiliencebasedClustering_17',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'HNS':
+                    return {
+                pane: 'pane_ResiliencebasedClustering_17',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'LL':
+                    return {
+                pane: 'pane_ResiliencebasedClustering_17',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'LNS':
+                    return {
+                pane: 'pane_ResiliencebasedClustering_17',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'NS':
+                    return {
+                pane: 'pane_ResiliencebasedClustering_17',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_ResiliencebasedClustering_17');
+        map.getPane('pane_ResiliencebasedClustering_17').style.zIndex = 417;
+        map.getPane('pane_ResiliencebasedClustering_17').style['mix-blend-mode'] = 'normal';
+        var layer_ResiliencebasedClustering_17 = new L.geoJson(json_ResiliencebasedClustering_17, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ResiliencebasedClustering_17',
+            layerName: 'layer_ResiliencebasedClustering_17',
+            pane: 'pane_ResiliencebasedClustering_17',
+            onEachFeature: pop_ResiliencebasedClustering_17,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_ResiliencebasedClustering_17_0(feature));
+            },
+        });
+        var cluster_ResiliencebasedClustering_17 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_ResiliencebasedClustering_17.addLayer(layer_ResiliencebasedClustering_17);
+
+        bounds_group.addLayer(layer_ResiliencebasedClustering_17);
+        function pop_RiskbasedClustering_18(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Geocoding Address</th>\
+                        <td>' + (feature.properties['field_2'] !== null ? autolinker.link(feature.properties['field_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Latitude</th>\
+                        <td>' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Longitude</th>\
+                        <td>' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Integrated Risk Index</th>\
+                        <td>' + (feature.properties['Integrated Risk Index'] !== null ? autolinker.link(feature.properties['Integrated Risk Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Normalized Risk Index</th>\
+                        <td>' + (feature.properties['Normalized Risk Index'] !== null ? autolinker.link(feature.properties['Normalized Risk Index'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Risk Rank</th>\
+                        <td>' + (feature.properties['Risk Rank'] !== null ? autolinker.link(feature.properties['Risk Rank'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Risk Classification</th>\
+                        <td>' + (feature.properties['Risk Classification'] !== null ? autolinker.link(feature.properties['Risk Classification'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_RiskbasedClustering_18_0(feature) {
+            switch(String(feature.properties['Risk Classification'])) {
+                case 'HH':
+                    return {
+                pane: 'pane_RiskbasedClustering_18',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'HNS':
+                    return {
+                pane: 'pane_RiskbasedClustering_18',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'LL':
+                    return {
+                pane: 'pane_RiskbasedClustering_18',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'LNS':
+                    return {
+                pane: 'pane_RiskbasedClustering_18',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'NS':
+                    return {
+                pane: 'pane_RiskbasedClustering_18',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [23.56, 23.56]
+        }),
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_RiskbasedClustering_18');
+        map.getPane('pane_RiskbasedClustering_18').style.zIndex = 418;
+        map.getPane('pane_RiskbasedClustering_18').style['mix-blend-mode'] = 'normal';
+        var layer_RiskbasedClustering_18 = new L.geoJson(json_RiskbasedClustering_18, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_RiskbasedClustering_18',
+            layerName: 'layer_RiskbasedClustering_18',
+            pane: 'pane_RiskbasedClustering_18',
+            onEachFeature: pop_RiskbasedClustering_18,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_RiskbasedClustering_18_0(feature));
+            },
+        });
+        var cluster_RiskbasedClustering_18 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_RiskbasedClustering_18.addLayer(layer_RiskbasedClustering_18);
+
+        bounds_group.addLayer(layer_RiskbasedClustering_18);
         var osmGeocoder = new L.Control.Geocoder({
             collapsed: true,
             position: 'topleft',
@@ -445,220 +1708,8 @@
         document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
         .title += 'Search for a place';
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/VulnerabilityIndex_5.png" /> Vulnerability Index': layer_VulnerabilityIndex_5,'<img src="legend/RiskIndex_4.png" /> Risk Index': layer_RiskIndex_4,'<img src="legend/ResilienceIndex_3.png" /> Resilience Index': layer_ResilienceIndex_3,'<img src="legend/HazardIndex_2.png" /> Hazard Index': layer_HazardIndex_2,'<img src="legend/districts2326_1.png" /> districts(2326)': layer_districts2326_1,"Positron [no labels] (retina)": layer_Positronnolabelsretina_0,}).addTo(map);
+        L.control.layers(baseMaps,{'Risk-based Clustering<br /><table><tr><td style="text-align: center;"><img src="legend/RiskbasedClustering_18_HH0.png" /></td><td>HH</td></tr><tr><td style="text-align: center;"><img src="legend/RiskbasedClustering_18_HNS1.png" /></td><td>HNS</td></tr><tr><td style="text-align: center;"><img src="legend/RiskbasedClustering_18_LL2.png" /></td><td>LL</td></tr><tr><td style="text-align: center;"><img src="legend/RiskbasedClustering_18_LNS3.png" /></td><td>LNS</td></tr><tr><td style="text-align: center;"><img src="legend/RiskbasedClustering_18_NS4.png" /></td><td>NS</td></tr></table>': cluster_RiskbasedClustering_18,'Resilience-based Clustering<br /><table><tr><td style="text-align: center;"><img src="legend/ResiliencebasedClustering_17_HH0.png" /></td><td>HH</td></tr><tr><td style="text-align: center;"><img src="legend/ResiliencebasedClustering_17_HNS1.png" /></td><td>HNS</td></tr><tr><td style="text-align: center;"><img src="legend/ResiliencebasedClustering_17_LL2.png" /></td><td>LL</td></tr><tr><td style="text-align: center;"><img src="legend/ResiliencebasedClustering_17_LNS3.png" /></td><td>LNS</td></tr><tr><td style="text-align: center;"><img src="legend/ResiliencebasedClustering_17_NS4.png" /></td><td>NS</td></tr></table>': cluster_ResiliencebasedClustering_17,'Vulnerability-based Clustering<br /><table><tr><td style="text-align: center;"><img src="legend/VulnerabilitybasedClustering_16_HH0.png" /></td><td>HH</td></tr><tr><td style="text-align: center;"><img src="legend/VulnerabilitybasedClustering_16_HNS1.png" /></td><td>HNS</td></tr><tr><td style="text-align: center;"><img src="legend/VulnerabilitybasedClustering_16_LL2.png" /></td><td>LL</td></tr><tr><td style="text-align: center;"><img src="legend/VulnerabilitybasedClustering_16_LNS3.png" /></td><td>LNS</td></tr><tr><td style="text-align: center;"><img src="legend/VulnerabilitybasedClustering_16_NS4.png" /></td><td>NS</td></tr></table>': cluster_VulnerabilitybasedClustering_16,'Hazard-based Clustering<br /><table><tr><td style="text-align: center;"><img src="legend/HazardbasedClustering_15_HH0.png" /></td><td>HH</td></tr><tr><td style="text-align: center;"><img src="legend/HazardbasedClustering_15_HNS1.png" /></td><td>HNS</td></tr><tr><td style="text-align: center;"><img src="legend/HazardbasedClustering_15_LL2.png" /></td><td>LL</td></tr><tr><td style="text-align: center;"><img src="legend/HazardbasedClustering_15_LNS3.png" /></td><td>LNS</td></tr><tr><td style="text-align: center;"><img src="legend/HazardbasedClustering_15_NS4.png" /></td><td>NS</td></tr></table>': cluster_HazardbasedClustering_15,'<img src="legend/TransportationFacilities_14.png" /> Transportation Facilities': layer_TransportationFacilities_14,'<img src="legend/BusStops_13.png" /> Bus Stops': layer_BusStops_13,'<img src="legend/MTRExits_12.png" /> MTR Exits': layer_MTRExits_12,'<img src="legend/SportsFacilities_11.png" /> Sports Facilities': layer_SportsFacilities_11,'<img src="legend/Markets_10.png" /> Markets': layer_Markets_10,'<img src="legend/BanksATMs_9.png" /> Banks/ATMs': layer_BanksATMs_9,'<img src="legend/Parks_8.png" /> Parks': layer_Parks_8,'<img src="legend/HealthcareFacilities_7.png" /> Healthcare Facilities': layer_HealthcareFacilities_7,'<img src="legend/EducationFacilities_6.png" /> Education Facilities': layer_EducationFacilities_6,'<img src="legend/PastLandslideIncidents_5.png" /> Past Landslide Incidents': layer_PastLandslideIncidents_5,'<img src="legend/FloodproneAreas_4.png" /> Flood-prone Areas': layer_FloodproneAreas_4,'<img src="legend/ResilientInfrastructure_3.png" /> Resilient Infrastructure': layer_ResilientInfrastructure_3,'<img src="legend/Consolidatedscores_2.png" /> Consolidated scores': layer_Consolidatedscores_2,'<img src="legend/Districts_1.png" /> Districts': layer_Districts_1,"Positron [no labels] (retina)": layer_Positronnolabelsretina_0,}).addTo(map);
         setBounds();
-        map.addControl(new L.Control.Search({
-            layer: layer_districts2326_1,
-            initial: false,
-            hideMarkerOnCollapse: true,
-            propertyName: 'ENAME'}));
-        document.getElementsByClassName('search-button')[0].className +=
-         ' fa fa-binoculars';
-        var mapDiv = document.getElementById('map');
-        var row = document.createElement('div');
-        row.className="row";
-        row.id="all";
-        row.style.height = "100%";
-        var col1 = document.createElement('div');
-        col1.className="col9";
-        col1.id = "mapWindow";
-        col1.style.height = "99%";
-        col1.style.width = "80%";
-        col1.style.display = "inline-block";
-        var col2 = document.createElement('div');
-        col2.className="col3";
-        col2.id = "menu";
-        col2.style.display = "inline-block";
-        mapDiv.parentNode.insertBefore(row, mapDiv);
-        document.getElementById("all").appendChild(col1);
-        document.getElementById("all").appendChild(col2);
-        col1.appendChild(mapDiv)
-        var Filters = {"Total": "real","Total Hazard Index Score": "real","Risk Index": "real"};
-        function filterFunc() {
-          map.eachLayer(function(lyr){
-          if ("options" in lyr && "dataVar" in lyr["options"]){
-            features = this[lyr["options"]["dataVar"]].features.slice(0);
-            try{
-              for (key in Filters){
-                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
-                if (Filters[key] == "str" || Filters[key] == "bool"){
-                  var selection = [];
-                  var options = document.getElementById("sel_" + keyS).options
-                  for (var i=0; i < options.length; i++) {
-                    if (options[i].selected) selection.push(options[i].value);
-                  }
-                    try{
-                      if (key in features[0].properties){
-                        for (i = features.length - 1;
-                          i >= 0; --i){
-                          if (selection.indexOf(
-                          features[i].properties[key])<0
-                          && selection.length>0) {
-                          features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                  }
-                }
-                if (Filters[key] == "int"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (parseInt(features[i].properties[key])
-                          < sliderVals[0]
-                          || parseInt(features[i].properties[key])
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "real"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (features[i].properties[key]
-                          < sliderVals[0]
-                          || features[i].properties[key]
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "date"
-                  || Filters[key] == "datetime"
-                  || Filters[key] == "time"){
-                  try{
-                    if (key in features[0].properties){
-                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
-                      startdate = document.getElementById("dat_" +
-                        HTMLkey + "_date1").value.replace(" ", "T");
-                      enddate = document.getElementById("dat_" +
-                        HTMLkey + "_date2").value.replace(" ", "T");
-                      for (i = features.length - 1; i >= 0; --i){
-                        if (features[i].properties[key] < startdate
-                          || features[i].properties[key] > enddate){
-                          features.splice(i,1);
-                        }
-                      }
-                    }
-                  } catch(err){
-                  }
-                }
-              }
-            } catch(err){
-            }
-          this[lyr["options"]["layerName"]].clearLayers();
-          this[lyr["options"]["layerName"]].addData(features);
-          }
-          })
-        }
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_Total = document.createElement("div");
-            div_Total.id = "div_Total";
-            div_Total.className = "slider";
-            document.getElementById("menu").appendChild(div_Total);
-            var lab_Total = document.createElement('div');
-            lab_Total.innerHTML  = 'Total: <span id="val_Total"></span>';
-            lab_Total.className = 'filterlabel';
-            document.getElementById("menu").appendChild(lab_Total);
-            var reset_Total = document.createElement('div');
-            reset_Total.innerHTML = 'clear filter';
-            reset_Total.className = 'filterlabel';
-            lab_Total.className = 'filterlabel';
-            reset_Total.onclick = function() {
-                sel_Total.noUiSlider.reset();
-            };
-            document.getElementById("menu").appendChild(reset_Total);
-            var sel_Total = document.getElementById('div_Total');
-            noUiSlider.create(sel_Total, {
-                connect: true,
-                start: [0.02, 0.74],
-                range: {
-                min: 0.02,
-                max: 0.74
-                }
-            });
-            sel_Total.noUiSlider.on('update', function (values) {
-            val_Total = document.getElementById('val_Total');
-            val_Total.innerHTML = values.join(' - ');
-                filterFunc()
-            });
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_TotalHazardIndexScore = document.createElement("div");
-            div_TotalHazardIndexScore.id = "div_TotalHazardIndexScore";
-            div_TotalHazardIndexScore.className = "slider";
-            document.getElementById("menu").appendChild(div_TotalHazardIndexScore);
-            var lab_TotalHazardIndexScore = document.createElement('div');
-            lab_TotalHazardIndexScore.innerHTML  = 'Total Hazard Index Score: <span id="val_TotalHazardIndexScore"></span>';
-            lab_TotalHazardIndexScore.className = 'filterlabel';
-            document.getElementById("menu").appendChild(lab_TotalHazardIndexScore);
-            var reset_TotalHazardIndexScore = document.createElement('div');
-            reset_TotalHazardIndexScore.innerHTML = 'clear filter';
-            reset_TotalHazardIndexScore.className = 'filterlabel';
-            lab_TotalHazardIndexScore.className = 'filterlabel';
-            reset_TotalHazardIndexScore.onclick = function() {
-                sel_TotalHazardIndexScore.noUiSlider.reset();
-            };
-            document.getElementById("menu").appendChild(reset_TotalHazardIndexScore);
-            var sel_TotalHazardIndexScore = document.getElementById('div_TotalHazardIndexScore');
-            noUiSlider.create(sel_TotalHazardIndexScore, {
-                connect: true,
-                start: [0.34, 0.61],
-                range: {
-                min: 0.34,
-                max: 0.61
-                }
-            });
-            sel_TotalHazardIndexScore.noUiSlider.on('update', function (values) {
-            val_TotalHazardIndexScore = document.getElementById('val_TotalHazardIndexScore');
-            val_TotalHazardIndexScore.innerHTML = values.join(' - ');
-                filterFunc()
-            });
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_RiskIndex = document.createElement("div");
-            div_RiskIndex.id = "div_RiskIndex";
-            div_RiskIndex.className = "slider";
-            document.getElementById("menu").appendChild(div_RiskIndex);
-            var lab_RiskIndex = document.createElement('div');
-            lab_RiskIndex.innerHTML  = 'Risk Index: <span id="val_RiskIndex"></span>';
-            lab_RiskIndex.className = 'filterlabel';
-            document.getElementById("menu").appendChild(lab_RiskIndex);
-            var reset_RiskIndex = document.createElement('div');
-            reset_RiskIndex.innerHTML = 'clear filter';
-            reset_RiskIndex.className = 'filterlabel';
-            lab_RiskIndex.className = 'filterlabel';
-            reset_RiskIndex.onclick = function() {
-                sel_RiskIndex.noUiSlider.reset();
-            };
-            document.getElementById("menu").appendChild(reset_RiskIndex);
-            var sel_RiskIndex = document.getElementById('div_RiskIndex');
-            noUiSlider.create(sel_RiskIndex, {
-                connect: true,
-                start: [0.01, 0.24],
-                range: {
-                min: 0.01,
-                max: 0.24
-                }
-            });
-            sel_RiskIndex.noUiSlider.on('update', function (values) {
-            val_RiskIndex = document.getElementById('val_RiskIndex');
-            val_RiskIndex.innerHTML = values.join(' - ');
-                filterFunc()
-            });
         </script>
     </body>
 </html>
